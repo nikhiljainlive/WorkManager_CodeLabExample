@@ -39,7 +39,7 @@ class SelectImageActivity : AppCompatActivity() {
     private val KEY_PERMISSIONS_REQUEST_COUNT = "KEY_PERMISSIONS_REQUEST_COUNT"
     private val MAX_NUMBER_REQUEST_PERMISSIONS = 2
 
-    private val permissions = Arrays.asList(
+    private val permissions = listOf(
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
