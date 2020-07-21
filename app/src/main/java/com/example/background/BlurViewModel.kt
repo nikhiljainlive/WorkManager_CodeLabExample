@@ -30,7 +30,7 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
     private val workManager = WorkManager.getInstance(application)
     internal var imageUri: Uri? = null
     internal var outputUri: Uri? = null
-    internal var outputWorkInfos : LiveData<List<WorkInfo>>
+    internal var outputWorkInfos: LiveData<List<WorkInfo>>
 
     init {
         outputWorkInfos = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
@@ -92,5 +92,9 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
             builder.putString(KEY_IMAGE_URI, it.toString())
         }
         return builder.build()
+    }
+
+    internal fun cancelWork() {
+        workManager.cancelUniqueWork(IMAGE_MANIPULATION_WORK_NAME)
     }
 }
