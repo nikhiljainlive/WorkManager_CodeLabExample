@@ -41,7 +41,10 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
      * @param blurLevel The amount to blur the image
      */
     internal fun applyBlur(blurLevel: Int) {
-        val cleanUpWorkRequest = OneTimeWorkRequest.from(CleanupWorker::class.java)
+        val chargingConstraints = Constraints.Builder()
+                .setRequiresCharging(true)
+                .build()
+        val cleanUpWorkRequest = OneTimeWorkRequestBuilder<CleanupWorker>().setConstraints(chargingConstraints).build()
         var continuation = workManager.beginUniqueWork(
                 IMAGE_MANIPULATION_WORK_NAME,
                 ExistingWorkPolicy.REPLACE,
@@ -50,6 +53,7 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
 
         for (i in 0 until blurLevel) {
             val blurRequest = OneTimeWorkRequestBuilder<BlurWorker>()
+                    .setConstraints(chargingConstraints)
 
             if (i == 0)
                 blurRequest.setInputData(
@@ -59,7 +63,12 @@ class BlurViewModel(application: Application) : AndroidViewModel(application) {
             continuation = continuation.then(blurRequest.build())
         }
 
+        val saveWorkConstraints = Constraints.Builder()
+                .setRequiresCharging(true)
+                .setRequiresStorageNotLow(true)
+                .build()
         val saveWorkRequest = OneTimeWorkRequestBuilder<SaveImageToFileWorker>()
+                .setConstraints(saveWorkConstraints)
                 .addTag(TAG_OUTPUT)
                 .build()
         continuation = continuation.then(saveWorkRequest)
