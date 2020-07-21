@@ -49,46 +49,4 @@ class SaveImageToFileWorker(context: Context, workerParams: WorkerParameters)
             Result.failure()
         }
     }
-
-/*    private fun initImageSaving(bitmap : Bitmap, title: String) {
-        var title = title
-        val relativeLocation = Environment.DIRECTORY_PICTURES + File.pathSeparator + "PocketDeen"
-        val contentValues = ContentValues().apply {
-            if (TextUtils.isEmpty(title)) title = "Image"
-            put(MediaStore.MediaColumns.DISPLAY_NAME, title)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                put(MediaStore.MediaColumns.RELATIVE_PATH, relativeLocation)
-                put(MediaStore.MediaColumns.IS_PENDING, 1)
-            }
-        }
-
-        val resolver = requireActivity().contentResolver
-
-
-        val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-        try {
-
-            uri?.let { uri ->
-                val stream = resolver.openOutputStream(uri)
-
-                stream?.let { stream ->
-                    if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream)) {
-                        throw IOException("Failed to save bitmap.")
-                    }
-                } ?: throw IOException("Failed to get output stream.")
-
-            } ?: throw IOException("Failed to create new MediaStore record")
-
-        } catch (e: IOException) {
-            if (uri != null) {
-                resolver.delete(uri, null, null)
-            }
-            throw IOException(e)
-        } finally {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-                contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0)
-        }
-    }*/
 }
